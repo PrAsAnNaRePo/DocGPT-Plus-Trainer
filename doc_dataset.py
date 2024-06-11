@@ -23,7 +23,7 @@ class DocDataset(Dataset):
         
         self.dataset = load_dataset('hotpotqa/hotpot_qa', 'fullwiki', split='train')
         clms = self.dataset.column_names
-        self.dataset = self.dataset.map(get_prompt, batched=True)
+        self.dataset = self.dataset.map(get_prompt)
         self.dataset = self.dataset.remove_columns(clms)
 
         print('len of dataset: ', len(self.dataset))
