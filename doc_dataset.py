@@ -21,7 +21,7 @@ class DocDataset(Dataset):
         self.tokenizer = tokenizer
         self.max_len = args.max_len
         
-        self.dataset = load_dataset('hotpotqa/hotpot_qa', 'fullwiki')
+        self.dataset = load_dataset('hotpotqa/hotpot_qa', 'fullwiki', split='train')
         clms = self.dataset.column_names
         self.dataset = self.dataset.map(get_prompt, batched=True)
         self.dataset = self.dataset.remove_columns(clms)
