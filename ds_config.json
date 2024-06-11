@@ -1,0 +1,43 @@
+{
+    "bf16": {
+      "enabled": true
+    },
+    "zero_optimization": {
+      "stage": 2,
+      "allgather_partitions": true,
+      "allgather_bucket_size": 500000000,
+      "overlap_comm": true,
+      "reduce_scatter": true,
+      "reduce_bucket_size": 500000000,
+      "contiguous_gradients": true
+    },
+    "optimizer": {
+      "type": "AdamW",
+      "params": {
+        "lr": 2e-5
+      }
+    },
+    "wandb": {
+      "enabled": true,
+      "project": "DocGPT"
+    },
+    "scheduler": {
+      "type": "WarmupLR",
+      "params": {
+        "warmup_min_lr": 0,
+        "warmup_max_lr": 0.00004,
+        "warmup_num_steps": 20
+      }
+    },
+    "activation_checkpointing": {
+      "partition_activations": true,
+      "cpu_checkpointing": true,
+      "number_checkpoints": 4,
+      "synchronize_checkpoint_boundary": false,
+      "contiguous_memory_optimization": false
+    },
+    "train_batch_size": 128,
+    "train_micro_batch_size_per_gpu": 16,
+    "gradient_accumulation_steps": 4,
+    "gradient_clipping": 1
+  }
