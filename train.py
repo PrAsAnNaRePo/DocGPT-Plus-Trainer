@@ -31,6 +31,7 @@ def add_argument():
     parser.add_argument("--epochs", type=int, default=2, help="No. of epochs")
     parser.add_argument("--max_len", type=int, default=512, help="maximum context length of the model (to train with).")
     parser.add_argument("--log_interval", type=int, default=10, help="Logging interval")
+    parser.add_argument("--use_flashattn", type=bool, default=False, help="Use flash attention for only GPUs that are Amphere or newer.")
     parser.add_argument("--ds_config", default=None)
     parser.add_argument("--local_rank", type=int, default=0)
     
@@ -78,11 +79,18 @@ def main():
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
     
-    model = AutoModelForCausalLM.from_pretrained(
-        args.model_id,
-        trust_remote_code=True,
-        attn_implementation="flash_attention_2"
-    )
+    if args.use_flashattn:
+        model = AutoModelForCausalLM.from_pretrained(
+            args.model_id,
+            trust_remote_code=True,
+            attn_implementation="flash_attention_2"
+        )
+    else:
+        model = AutoModelForCausalLM.from_pretrained(
+            args.model_id,
+            trust_remote_code=True,
+        )
+
     count_parameters(model)
     
     training_data = DocDataset(args, tokenizer=tokenizer)
