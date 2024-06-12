@@ -80,7 +80,8 @@ def main():
     
     model = AutoModelForCausalLM.from_pretrained(
         args.model_id,
-        trust_remote_code=True
+        trust_remote_code=True,
+        attn_implementation="flash_attention_2"
     )
     count_parameters(model)
     
